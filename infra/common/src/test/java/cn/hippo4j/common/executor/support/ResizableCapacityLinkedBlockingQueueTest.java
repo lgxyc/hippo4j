@@ -22,6 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -31,6 +33,12 @@ import java.util.stream.IntStream;
 
 @Slf4j
 public class ResizableCapacityLinkedBlockingQueueTest {
+
+    @Test
+    public void testCapacityIsVolatile() throws NoSuchFieldException {
+        Field capacityField = ResizableCapacityLinkedBlockingQueue.class.getDeclaredField("capacity");
+        Assert.assertTrue(Modifier.isVolatile(capacityField.getModifiers()));
+    }
 
     @Test
     public void testResizableCapacityLinkedBlockingQueueSize() throws InterruptedException {
